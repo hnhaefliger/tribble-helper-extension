@@ -18,12 +18,15 @@ window.addEventListener('message', (e) => {
 function handleWindowMessage(message) {
     switch (message.data.action) {
         case 'hover':
-            chrome.runtime.sendMessage({
-                action: 'hover',
-                data: message.data.data,
-                receiver: 'tribble_helper_background',
-                sender: 'tribble_helper_injector',
-            });
+            fetch('http://localhost:8000/api/text_analysis/keywords/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: message.data.data
+                })
+            }).then(data => console.log(data));
             break;
     }
 }
