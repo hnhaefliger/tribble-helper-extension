@@ -23,9 +23,6 @@ function handleMessage(message) {
         updateTabs();
       });
       break;
-
-    case 'hover':
-      console.log(message.data);
   }
 }
 

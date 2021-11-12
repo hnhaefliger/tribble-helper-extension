@@ -26,7 +26,9 @@ function handleWindowMessage(message) {
                 body: JSON.stringify({
                     text: message.data.data
                 })
-            }).then(data => console.log(data));
+            })
+            .then(response => response.json())
+            .then(data => console.log(data));
             break;
     }
 }
