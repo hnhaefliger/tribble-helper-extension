@@ -29,6 +29,8 @@ chrome.runtime.onMessage.addListener((e) => {
     }
 });
 
+updateDisplay();
+
 function handleMessage(message) {
   switch (message.action) {
     case 'update':
@@ -54,5 +56,3 @@ function updateDisplay() {
         }
     });
 }
-
-updateDisplay();

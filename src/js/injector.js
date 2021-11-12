@@ -17,21 +17,6 @@ window.addEventListener('message', (e) => {
 function handleWindowMessage(message) {
     switch (message.data.action) {
         case 'hover':
-            fetch('http://localhost:8000/api/text_analysis/keywords/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    text: message.data.data
-                })
-            })
-            .then((response) => {
-                response.json()
-            })
-            .then((data) => {
-                //console.log(data)
-            });
             break;
     }
 }
@@ -72,7 +57,7 @@ function injectListener() {
     listener.src = chrome.runtime.getURL('js/listener.js');
     listener.onload = () => {
         updateListener();
-        listener.remove();
+        //listener.remove();
     };
 
     (document.head || document.documentElement).appendChild(listener);
