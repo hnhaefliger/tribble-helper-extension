@@ -1,7 +1,6 @@
 sessionState = 'idle';
 
 injectListener();
-updateListener();
 
 chrome.runtime.onMessage.addListener((e) => {
     if (e.receiver === 'tribble_helper_injector') {
@@ -27,8 +26,12 @@ function handleWindowMessage(message) {
                     text: message.data.data
                 })
             })
-            .then(response => response.json())
-            .then(data => console.log(data));
+            .then((response) => {
+                response.json()
+            })
+            .then((data) => {
+                //console.log(data)
+            });
             break;
     }
 }
@@ -68,6 +71,7 @@ function injectListener() {
     listener = document.createElement('script');
     listener.src = chrome.runtime.getURL('js/listener.js');
     listener.onload = () => {
+        updateListener();
         listener.remove();
     };
 

@@ -1,4 +1,5 @@
 sessionState = 'idle';
+selection = null;
 
 function initListeners(element) {
     text = getNodeText(element);
@@ -25,19 +26,32 @@ function addListeners(element) {
 
 function handleElementMouseOver(element, event) {
     if (sessionState === 'running') {
-        window.postMessage({
-            action: 'hover',
-            data: element.innerText,
-            receiver: 'tribble_helper_injector',
-            sender: 'tribble_helper_listener',
-        });
-        element.style.backgroundColor = 'green';
+        if (selection !== element) {
+            console.log('mouseover');
+
+            selection = element;
+
+            window.postMessage({
+                action: 'hover',
+                data: element.innerText,
+                receiver: 'tribble_helper_injector',
+                sender: 'tribble_helper_listener',
+            });
+
+            element.style.backgroundColor = 'green';
+        }
     }
 }
 
 function handleElementMouseOut(element, event) {
     if (sessionState === 'running') {
-        element.style.backgroundColor = '';
+        if (!element.contains(document.elementFromPoint(event.clientX, event.clientY))) {
+            console.log('mouseout');
+
+            selection = null;
+
+            element.style.backgroundColor = '';
+        }
     }
 }
 
