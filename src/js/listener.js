@@ -1,5 +1,9 @@
+sessionState = 'idle';
+
 function initListeners(element) {
-    if (getNodeText(element) === '') {
+    text = getNodeText(element);
+
+    if (text === '' || text === ' ') {
         Array.from(element.children).forEach((child) => {
             initListeners(child)
         });
@@ -20,11 +24,21 @@ function addListeners(element) {
 }
 
 function handleElementMouseOver(element, event) {
-    element.style.backgroundColor = 'green';
+    if (sessionState === 'running') {
+        window.postMessage({
+            action: 'hover',
+            data: element.innerText,
+            receiver: 'tribble_helper_injector',
+            sender: 'tribble_helper_listener',
+        });
+        element.style.backgroundColor = 'green';
+    }
 }
 
 function handleElementMouseOut(element, event) {
-    element.style.backgroundColor = '';
+    if (sessionState === 'running') {
+        element.style.backgroundColor = '';
+    }
 }
 
 function getNodeText(element) {
@@ -48,4 +62,23 @@ function getNodeText(element) {
     return text;
 }
 
+function handleMessage(message) {
+    switch (message.data.action) {
+        case 'start':
+            sessionState = 'running';
+            break;
+
+        case 'stop':
+            sessionState = 'idle';
+            break;
+    }
+
+}
+
 initListeners(document.body);
+
+window.addEventListener('message', (e) => {
+    if (e.data.receiver === 'tribble_helper_listener') {
+        handleMessage(e);
+    }
+});
